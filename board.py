@@ -1,4 +1,5 @@
 from enum import Enum
+from re import compile
 from typing import Union
 
 
@@ -99,3 +100,30 @@ class Board:
     ):
 
         self.board[free_column][player_choice] = player_counter
+
+    @staticmethod
+    def win_check_re(
+        player_counter: Union[Markers.PLAYER_1, Markers.PLAYER_2]
+    ) -> compile:
+        pattern = compile(
+            fr".?[{player_counter}]" + r"{4}.?"
+        )
+
+        return pattern
+
+    def win_check(self):
+
+        player_1_pattern = self.win_check_re(Markers.PLAYER_1)
+        player_2_pattern = self.win_check_re(Markers.PLAYER_2)
+
+    def horizontal_win_check(self, pattern: compile) -> bool:
+
+        for column, row in enumerate(self.board, -1):
+
+            row_joined = "".join([square.value for square in row])
+
+            if pattern.search(row_joined):
+                return True
+
+            else:
+                return False
