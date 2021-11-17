@@ -16,68 +16,28 @@ class Markers(Enum):
 
 
 class Board:
+    def __init__(self, board_height: int = 5, board_width: int = 5):
+        self.board_height = board_height
+        self.board_height = board_width
+        self.board = self.new_board(board_width, board_height)
 
-    PLAYER_1 = "X"
-    PLAYER_2 = "O"
+    @staticmethod
+    def new_board(board_width, board_height):
 
-    board = [
-        [
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-        ],
-        [
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-        ],
-        [
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-        ],
-        [
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-        ],
-        [
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-        ],
-        [
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-            Markers.CLEAR,
-        ],
-        [
-            Markers.BOTTOM_0,
-            Markers.BOTTOM_1,
-            Markers.BOTTOM_2,
-            Markers.BOTTOM_3,
-            Markers.BOTTOM_4,
-            Markers.BOTTOM_5,
-        ],
-    ]
+        board = [
+            [Markers.CLEAR for _ in range(board_width)] for _ in range(board_height)
+        ]
+        board += [
+            [
+                Markers.BOTTOM_0,
+                Markers.BOTTOM_1,
+                Markers.BOTTOM_2,
+                Markers.BOTTOM_3,
+                Markers.BOTTOM_4,
+                Markers.BOTTOM_5,
+            ]
+        ]
+        return board
 
     def display_board(self):
         for row in self.board:
@@ -94,7 +54,7 @@ class Board:
 
     def place_counter(
         self,
-        player_counter: Union[Markers.PLAYER_1, Markers.PLAYER_2],
+        player_counter: Markers,
         player_choice: int,
         free_column: int,
     ):
@@ -102,12 +62,8 @@ class Board:
         self.board[free_column][player_choice] = player_counter
 
     @staticmethod
-    def win_check_re(
-        player_counter: Union[Markers.PLAYER_1, Markers.PLAYER_2]
-    ) -> compile:
-        pattern = compile(
-            fr".?[{player_counter}]" + r"{4}.?"
-        )
+    def win_check_re(player_counter: Markers) -> compile:
+        pattern = compile(fr".?[{player_counter}]" + r"{4}.?")
 
         return pattern
 
